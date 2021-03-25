@@ -10,3 +10,7 @@
 }
 
 /* Include any custom CSS styling here! */
+.axis path, .axis line {
+    fill: none;
+    stroke: none;
+}

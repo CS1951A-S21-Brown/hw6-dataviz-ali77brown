@@ -103,8 +103,9 @@ function setData(indexVar) {
 
         svg3.append('g')
             .attr('class', 'axis')
-            .attr('transform', `translate(${(graph_3_width - margin.left - margin.right)-373}, ${(graph_3_height - margin.top - margin.bottom)})`)
-            .call(d3version5.axisBottom(x_3).tickSize(0));
+            .attr('transform', `translate(${(graph_3_width - margin.left - margin.right)-430}, ${(graph_3_height - margin.top - margin.bottom)})`)
+            .call(d3version5.axisBottom(x_3).tickSize(0))
+            .style({'fill': 'none', 'stroke-width': '0px'});
 
         svg3.append("text")
         .attr("transform", `translate(${(graph_3_width - margin.left - margin.right) / 2},
@@ -120,6 +121,7 @@ function setData(indexVar) {
         svg3.select('#y3axnums').remove();
         svg3.append("g")
         .attr('id', 'y3axnums')
+        .attr('transform', `translate(-25, 0)`)
         .call(d3version5.axisLeft(y_3));
 
         var text = '';
@@ -131,7 +133,7 @@ function setData(indexVar) {
         svg3.select('#y3axis').remove();
         svg3.append('text')
             .attr("id", "y3axis")
-            .attr("transform", `translate(-50, ${(graph_3_height - margin.top - margin.bottom) / 2})`)  
+            .attr("transform", `translate(-65, ${(graph_3_height - margin.top - margin.bottom) / 3})`)  
             .style("text-anchor", "middle")
             .text(text);
         
@@ -172,7 +174,7 @@ function setData(indexVar) {
         svg3.select('#y3title').remove();
         svg3.append("text")
         .attr("id", "y3title")
-        .attr("transform", `translate(${(graph_3_width - margin.left - margin.right)-200 }, ${-20})`)       
+        .attr("transform", `translate(${(graph_3_width - margin.left - margin.right)/2.5 }, ${-20})`)       
         .style("text-anchor", "middle")
         .style("font-size", 15)
         .text(winner + " will win the 2022 FIFA World Cup!");
