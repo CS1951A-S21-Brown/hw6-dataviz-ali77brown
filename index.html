@@ -50,6 +50,69 @@
         <div class="col-lg-6">
             <div id="graph1"></div>
             <div id="graph2"></div><br/>
+            <div id='writtenqs'>
+                <br>
+                <h3>Written Questions</h3>
+                <br>
+                <ol>
+                    <li>
+                        The first bar graph addresses the 1st question by 
+                        showing the number of games per year from 2020 down to 2011. The second graph, the map, 
+                        shows the top 10 winning nations and you can hover over the blue countries to see their
+                        winning %. The third graph, the lollipop chart, incorporates the toggle button and predicts
+                        which team will win the 2022 World Cup based on data from the past two world cups (2018 and 2014)
+                        based on first Winning % out of those 2 World Cups or Victory Strength (how much the winner won by 
+                        for each of the past 2 World Cup tournament games). The prediction shows as the title of the graph.
+                        I chose these two metrics because we should bet on teams that have won most of their games in the past
+                        as that shows a good performance record and a higher victory strength means they didn't just barely
+                        win by chance but are actually a better team.
+                    </li>
+                    <li>
+                        D3 was helpful because it allowed me to express the data in a geographical way 
+                        on the map, which is visually beneficial. Also, the hover function allowed me to express
+                        the winning % information without cluttering the map area by showing it all at once.
+                        Thirdly, the toggle button function helped to visually see the direct change in the World Cup
+                        winner prediction based on the two different metrics and it's easy to toggle back and 
+                        forth for comparison.
+                    </li>
+                    <li>
+                        D3 would not be the best tool for creating a visualization if the visualization creator
+                        is not well-versed in coding and needs a quick and easy way to visualize data. That's where
+                        something like Tableau would be better since it still represents data in numerical and organized
+                        graphs but you don't have to build everything from the ground up in a complex manner. Another 
+                        reason you wouldn't use D3 is if you have many SVG elements needed to show your data. Creating 
+                        the js and html code to account for all those graphs would be very painstaking and inefficient.
+                        Finally, D3 wouldn't be the best tool if the target audience learns better through audio or some other
+                        form of information platform that doesn't rely as heavily on just one human sense. For example, showing
+                        video or more complicated multimedia components as part of the data would be hard through D3.
+                    </li>
+                    <br>
+                    <h4>Accessible Data Visualization</h4>
+                    <br>
+                    <li>
+                        Users who have full visual ability and digest visual information well would find this
+                        dashboard accessbile. As referenced in "A Comprehensive Guide to Accessible Data Visualization", 
+                        color blind or blind users may find visual dashboards more difficult to 
+                        use. I chose the blue color for the map off of the color blind friendly website, but I 
+                        could do that for all the colors in my graphs to make sure none of the graphs are harder 
+                        to see than others. The article also provides color contrast guidelines to ensure better legibility 
+                        for users which I could incorporate. Both articles also reference assistive technology, such as 
+                        a screen reader which only reads the text on the screen, which means my hover feature for the map 
+                        would be hidden for certain users. I could add the hover information somewhere on the side of the 
+                        map on the screen in addition to the hover feature so that users with screen readers can still get
+                        all the necessary information off the visualization.
+                    </li>
+                    <li>
+                        I could have added the hover information on the side of the map when I was implementing the hover
+                        feature. I didn't do so because I didn't know about users with screen readers and how the hover information
+                        would be hidden from them, but now I know! I also could have checked the other colors in my graph
+                        when I was using the color blind friendly blue color from the website. I wasn't sure how to implement
+                        the scale of colors using color blind friendly colors for the first graph, so I didn't go forward with it
+                        but I definitely will try next time.
+                    </li>
+                </ol>
+
+            </div><br/>
         </div>
         <div class="col-lg-6">
             <button type="button" class="btn btn-info" onclick="setData(3)">World Cup Winning %</button>
