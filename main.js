@@ -42,10 +42,6 @@ function setData(indexVar) {
         teams = {};
         cleanData(data);
     
-        // FOR GRAPH 3: WHO WILL WIN THE WORLD CUP 2022
-    
-    
-    
         // FOR GRAPH 2: MAP OF TOP 10 WINNING PERCTS
         // calculate winning percentages for each team
         data.forEach(function(d) {
@@ -53,7 +49,7 @@ function setData(indexVar) {
             teams[d.home_team][0] += 1;
             teams[d.away_team][0] += 1;
     
-            if (d.tournament == 'FIFA World Cup') {
+            if (d.tournament == 'FIFA World Cup' && d.date >= 2014) {
                 teams_wc[d.home_team][0] += 1;
                 teams_wc[d.away_team][0] += 1;
             }
@@ -61,32 +57,120 @@ function setData(indexVar) {
             // add to winning team's win counter
             // add victory strength to data structure as 3rd input 
             if (d.winner == d.home_team) {
-                if (d.tournament == 'FIFA World Cup') {
+                if (d.tournament == 'FIFA World Cup' && d.date >= 2014) {
                     teams_wc[d.home_team][1] += 1;
                     teams_wc[d.home_team][2] += d.victory_strength;
                 }
                 teams[d.home_team][1] += 1;
             } else if (d.winner == d.away_team) {
-                if (d.tournament == 'FIFA World Cup') {
+                if (d.tournament == 'FIFA World Cup' && d.date >= 2014) {
                     teams_wc[d.away_team][1] += 1;
                     teams_wc[d.away_team][2] += d.victory_strength;
                 }
                 teams[d.away_team][1] += 1;
             }
         });
+
         // do the pct calculation, add as 4th value
-        
         Object.keys(teams_wc).forEach(function(key) {
             // console.log(teams_wc[key]);
             teams_wc[key][3] = (teams_wc[key][1] / teams_wc[key][0]);
         });
 
         //sort by winning_pct, greatest to least, get top 5
+        // console.log(teams_wc);
         teams_wc = Object.keys(teams_wc).map( key => ({ key, value: teams_wc[key] }) ).sort(function(a, b) {
-            // if (b.value[3] != undefined && a.value[3] != undefined) {
-                return b.value[3] - a.value[3]
-            // }
+            if (!Number.isNaN(b.value[3]) && !Number.isNaN(a.value[3])) {   
+                if (b.value[3] > a.value[3]) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            } else if (Number.isNaN(b.value[3])) {
+                return -1;
+            } else if (Number.isNaN(a.value[3])) {
+                return 1;
+            }
         }).slice(0,5);
+
+        console.log(teams_wc);
+
+        // FOR GRAPH 3: WHO WILL WIN THE WORLD CUP 2022
+
+        // create x-axis, team name
+        let x_3 = d3version5.scaleBand()
+        .domain(teams_wc.map(function(d) {return d.key}))
+        .range([0, (graph_3_width - margin.left - margin.right)])
+        .padding(0.1);
+
+        svg3.append('g')
+            .attr('transform', `translate(${(graph_3_width - margin.left - margin.right)-373}, ${(graph_3_height - margin.top - margin.bottom)})`)
+            .call(d3version5.axisBottom(x_3));
+
+        svg3.append("text")
+        .attr("transform", `translate(${(graph_3_width - margin.left - margin.right) / 2},
+                                        ${(graph_3_height - margin.top - margin.bottom) + 35})`)       
+        .style("text-anchor", "middle")
+        .text("Team");
+        
+        // create y-axis, either win_pct or vic_str
+        let y_3 = d3version5.scaleLinear()
+        .domain([0, d3version5.max(teams_wc, function(d) {return d.value[indexVar]})])
+        .range([graph_3_height - margin.top - margin.bottom, 0]);
+        var text = '';
+        if (indexVar == 2) {
+            text = 'Total \nVictory \nStrength';
+        } else {
+            text = 'World \nCup \nWinning %';
+        };
+        svg3.select('#y3axis').remove();
+        svg3.append('text')
+            .attr("id", "y3axis")
+            .attr("transform", `translate(-100, ${(graph_3_height - margin.top - margin.bottom) / 2})`)       
+            .style("text-anchor", "middle")
+            .text(text);
+        
+        let lines = svg3.selectAll(".myLine")
+            .data(teams_wc)
+        lines
+            .enter()
+            .append("line")
+            .attr("class", "myLine")
+            .merge(lines)
+            .transition()
+            .duration(1000)
+                .attr("x1", function(d) { return x_3(d.key); })
+                .attr("x2", function(d) { return x_3(d.key); })
+                .attr("y1", y_3(0))
+                .attr("y2", function(d) { return y_3(d.value[indexVar]); })
+                .attr("stroke", "black")
+        
+        let circles = svg3.selectAll('circle')
+            .data(teams_wc)
+            .enter()
+            .append('circle')
+        circles
+            .merge(circles)
+            .transition()
+            .duration(1000)
+                .attr('cx', function(d) { return x_3(d.key); })
+                .attr("cy", function(d) { return y_3(d.value[indexVar]); })
+                .attr("r", 15)
+                .attr("fill", "#69b3a2");
+
+        // add chart title
+        if (indexVar == 2) {
+            winner = 'France';
+        } else {
+            winner = 'Belgium';
+        };
+        svg3.select('#y3title').remove();
+        svg3.append("text")
+        .attr("id", "y3title")
+        .attr("transform", `translate(${(graph_3_width - margin.left - margin.right)-200 }, ${-20})`)       
+        .style("text-anchor", "middle")
+        .style("font-size", 15)
+        .text(winner + " will win the 2022 FIFA World Cup!");
     
         // do the pct calculation
         Object.keys(teams).forEach(function(key) {
@@ -264,17 +348,17 @@ function cleanData(data) {
         d.away_score = +d.away_score;
         if (d.home_score > d.away_score) {
             d.winner = d.home_team;
-            if (d.tournament == 'FIFA World Cup') {
+            if (d.tournament == 'FIFA World Cup' && d.date >= 2014) {
                 d.victory_strength = d.home_score - d.away_score;
             }
         } else if (d.away_score > d.home_score){
             d.winner = d.away_team;
-            if (d.tournament == 'FIFA World Cup') {
+            if (d.tournament == 'FIFA World Cup' && d.date >= 2014) {
                 d.victory_strength = d.away_score - d.home_score;
             }
         } else {
             d.winner = null;
-            if (d.tournament == 'FIFA World Cup') {
+            if (d.tournament == 'FIFA World Cup' && d.date >= 2014) {
                 d.victory_strength = 0;
             }
         }
