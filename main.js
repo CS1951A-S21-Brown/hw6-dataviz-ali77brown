@@ -33,7 +33,7 @@ let tooltip_2 = d3version5.select("#graph2")
 let svg3 = d3version5.select("#graph3")      
     .append("svg")
     .attr("width", graph_3_width)     
-    .attr("height", graph_3_height)     
+    .attr("height", graph_3_height)    
     .append("g")
     .attr("transform", `translate(${margin.right}, ${margin.top})`);
 
@@ -103,7 +103,7 @@ function setData(indexVar) {
 
         svg3.append('g')
             .attr('class', 'axis')
-            .attr('transform', `translate(${(graph_3_width - margin.left - margin.right)-430}, ${(graph_3_height - margin.top - margin.bottom)})`)
+            .attr('transform', `translate(${(graph_3_width - margin.left - margin.right-(MAX_WIDTH/3.25))}, ${(graph_3_height - margin.top - margin.bottom)})`)
             .call(d3version5.axisBottom(x_3).tickSize(0))
             .style({'fill': 'none', 'stroke-width': '0px'});
 
