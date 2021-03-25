@@ -74,7 +74,7 @@ function setData(indexVar) {
         // do the pct calculation, add as 4th value
         Object.keys(teams_wc).forEach(function(key) {
             // console.log(teams_wc[key]);
-            teams_wc[key][3] = (teams_wc[key][1] / teams_wc[key][0]);
+            teams_wc[key][3] = (teams_wc[key][1] / teams_wc[key][0])*100;
         });
 
         //sort by winning_pct, greatest to least, get top 5
@@ -93,8 +93,6 @@ function setData(indexVar) {
             }
         }).slice(0,5);
 
-        console.log(teams_wc);
-
         // FOR GRAPH 3: WHO WILL WIN THE WORLD CUP 2022
 
         // create x-axis, team name
@@ -104,8 +102,9 @@ function setData(indexVar) {
         .padding(0.1);
 
         svg3.append('g')
+            .attr('class', 'axis')
             .attr('transform', `translate(${(graph_3_width - margin.left - margin.right)-373}, ${(graph_3_height - margin.top - margin.bottom)})`)
-            .call(d3version5.axisBottom(x_3));
+            .call(d3version5.axisBottom(x_3).tickSize(0));
 
         svg3.append("text")
         .attr("transform", `translate(${(graph_3_width - margin.left - margin.right) / 2},
@@ -117,16 +116,22 @@ function setData(indexVar) {
         let y_3 = d3version5.scaleLinear()
         .domain([0, d3version5.max(teams_wc, function(d) {return d.value[indexVar]})])
         .range([graph_3_height - margin.top - margin.bottom, 0]);
+
+        svg3.select('#y3axnums').remove();
+        svg3.append("g")
+        .attr('id', 'y3axnums')
+        .call(d3version5.axisLeft(y_3));
+
         var text = '';
         if (indexVar == 2) {
-            text = 'Total \nVictory \nStrength';
+            text = 'Victory Strength';
         } else {
-            text = 'World \nCup \nWinning %';
+            text = 'Winning %';
         };
         svg3.select('#y3axis').remove();
         svg3.append('text')
             .attr("id", "y3axis")
-            .attr("transform", `translate(-100, ${(graph_3_height - margin.top - margin.bottom) / 2})`)       
+            .attr("transform", `translate(-50, ${(graph_3_height - margin.top - margin.bottom) / 2})`)  
             .style("text-anchor", "middle")
             .text(text);
         
@@ -147,9 +152,9 @@ function setData(indexVar) {
         
         let circles = svg3.selectAll('circle')
             .data(teams_wc)
+        circles
             .enter()
             .append('circle')
-        circles
             .merge(circles)
             .transition()
             .duration(1000)
