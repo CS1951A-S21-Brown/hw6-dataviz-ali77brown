@@ -80,15 +80,15 @@ function setData(indexVar) {
         //sort by winning_pct, greatest to least, get top 5
         // console.log(teams_wc);
         teams_wc = Object.keys(teams_wc).map( key => ({ key, value: teams_wc[key] }) ).sort(function(a, b) {
-            if (!Number.isNaN(b.value[3]) && !Number.isNaN(a.value[3])) {   
-                if (b.value[3] > a.value[3]) {
+            if (!Number.isNaN(b.value[indexVar]) && !Number.isNaN(a.value[indexVar])) {   
+                if (b.value[indexVar] > a.value[indexVar]) {
                     return 1;
                 } else {
                     return -1;
                 }
-            } else if (Number.isNaN(b.value[3])) {
+            } else if (Number.isNaN(b.value[indexVar])) {
                 return -1;
-            } else if (Number.isNaN(a.value[3])) {
+            } else if (Number.isNaN(a.value[indexVar])) {
                 return 1;
             }
         }).slice(0,5);
@@ -101,8 +101,10 @@ function setData(indexVar) {
         .range([0, (graph_3_width - margin.left - margin.right)])
         .padding(0.1);
 
+        svg3.select('#x3ax').remove();
         svg3.append('g')
             .attr('class', 'axis')
+            .attr('id', 'x3ax')
             .attr('transform', `translate(${(graph_3_width - margin.left - margin.right-(MAX_WIDTH/3.25))}, ${(graph_3_height - margin.top - margin.bottom)})`)
             .call(d3version5.axisBottom(x_3).tickSize(0))
             .style({'fill': 'none', 'stroke-width': '0px'});
